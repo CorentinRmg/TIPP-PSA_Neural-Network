@@ -28,7 +28,7 @@ def train_xor(net: Optimizer, inputs: Tensor, targets: Tensor, epochs: int = 100
 #train_xor(net1, X, Ytarget)_
 
 
-##NON-LINEAR NETWORK (adding an )
+##NON-LINEAR NETWORK (adding a non-linear activation layer: Tanh(), Sigmoid(), ...)
 net2 = NeuralNet([
         # Add the layers here
         Linear(input_size=2, output_size=2),
