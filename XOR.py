@@ -1,5 +1,5 @@
 import numpy as np
-from cookingNeuralNet import *
+from NeuralNet import *
 
 X = np.array([[0, 0],
               [1, 0],
@@ -8,12 +8,16 @@ X = np.array([[0, 0],
 
 Ytarget = np.array([[0], [1], [1], [0]])
 
+#X = np.array([[-354, 342]])
+#
+#Ytarget = np.array([[42]])
+
 def print_xor_results(inputs: Tensor, targets: Tensor, predictions: Tensor) -> None:
     print('\n  X   => y_target => y_pred  => round(y_pred)')
     for x, y, z in zip(inputs, targets, predictions):
         print(f'{x} =>   {y}    => {float(z):.5f} =>    {z.round()}')
         
-def train_xor(net: Optimizer, inputs: Tensor, targets: Tensor, epochs: int = 2000):
+def train_xor(net: Optimizer, inputs: Tensor, targets: Tensor, epochs: int = 10000):
     train(net, inputs, targets, num_epochs=epochs)
     predictions = net.forward(inputs)
     print_xor_results(inputs, targets, predictions)
@@ -24,11 +28,12 @@ def train_xor(net: Optimizer, inputs: Tensor, targets: Tensor, epochs: int = 200
 #train_xor(net1, X, Ytarget)_
 
 
-##NON-LINEAR NETWORK (adding a non-linear activation layer: Tanh(), Sigmoid(), ...)
+##NON-LINEAR NETWORK (adding an )
 net2 = NeuralNet([
         # Add the layers here
         Linear(input_size=2, output_size=2),
         Tanh(),
+        #ReLu(),
         Linear(input_size=2, output_size=1)
 ])
 

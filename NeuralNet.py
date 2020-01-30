@@ -69,7 +69,8 @@ class Linear(Layer):
         self.grads["w"] = self.inputs.T @ grad
         self.grads["b"] = np.sum(grad, axis=0)
         # Compute here the feed backward pass
-        return grad @ self.params["w"].T 
+        dA = grad @ self.params["w"].T
+        return dA
     
 class Activation(Layer):
     """
@@ -120,6 +121,16 @@ class Sigmoid(Activation):  #creates an activation layer using a sigmoïd as act
     def __init__(self):
         super().__init__(sigmoid, sigmoid_prime)
 
+def relu(x: Tensor) -> Tensor:
+    return np.maximum(0,x)
+
+def relu_backward(x: Tensor) -> Tensor:
+    M=x>0 #gives a matrix with 'True'/'False' values
+    return M.astype(int)
+
+class ReLu(Activation):  #creates an activation layer using ReLu as activation function
+    def __init__(self):
+        super().__init__(relu, relu_backward)
 
 ##Neural Network
 class NeuralNet:
