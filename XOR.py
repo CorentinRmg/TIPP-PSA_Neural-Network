@@ -25,7 +25,7 @@ Ytarget = np.array([[0], [1], [1], [0]])
 def print_xor_results(inputs: Tensor, targets: Tensor, predictions: Tensor) -> None:
     print('\n  X   => y_target =>   y_pred  => round(y_pred)')
     for x, y, z in zip(inputs, targets, predictions):
-        print(f'{x} =>   {y}    => {z.round(5)} =>  {z.round()}') #{float(z):.5f} =>    {z.round()}')
+        print(f'{x} =>   {y}    => {z.round(5)} =>  {z.round()}')
         
 def train_xor(net: Optimizer, inputs: Tensor, targets: Tensor, epochs: int = 10000):
     train(net, inputs, targets, num_epochs=epochs)
@@ -41,9 +41,9 @@ def train_xor(net: Optimizer, inputs: Tensor, targets: Tensor, epochs: int = 100
 net2 = NeuralNet([
         # Add the layers here
         Linear(input_size=2, output_size=2),
-        #Tanh(),
+        Tanh(),
         #ReLu(),
-        Sigmoid(),
+        #Sigmoid(),
         Linear(input_size=2, output_size=1)
 ])
 
