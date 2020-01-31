@@ -7,6 +7,7 @@ from typing import (Dict, Tuple, Callable, Sequence, Iterator, NamedTuple)
 from numpy import ndarray as Tensor
 Func = Callable[[Tensor], Tensor] #Function which takes a tensor and return a tensor
 
+#np.random.seed(99)
 
 ##Loss Function 
 class Loss:
