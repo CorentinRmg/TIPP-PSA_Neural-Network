@@ -27,7 +27,27 @@ class MeanSquareError(Loss): #inherits from 'Loss' class
     def grad(self, predicted: Tensor, actual: Tensor) -> Tensor:
         dMSE=2*(predicted-actual) #Derivative with respect to each variable of the 'predicted' tensor
         return dMSE
+    
+#-----------WIP----------------------------------------------------------------
+class CrossEntropy(Loss): #inherits from 'Loss' class 
+    
+    def loss(self, predicted, actual):
+        m = actual.shape[1]
+        cost = -1 / m * (np.dot(predicted, np.log(actual).T) + np.dot(1 - predicted, np.log(1 - actual).T))
+        return np.squeeze(cost)
+    
+    def grad(self, predicted: Tensor, actual: Tensor) -> Tensor:
+        dcost = - (np.divide(predicted, actual) - np.divide(1 - predicted, 1 - actual)) #Derivative with respect to each variable of the 'predicted' tensor
+        return dcost
 
+#def get_cost_value(Y_hat=actual, Y):
+#    # number of examples
+#    m = Y_hat.shape[1]
+#    # calculation of the cost according to the formula
+#    cost = -1 / m * (np.dot(Y, np.log(Y_hat).T) + np.dot(1 - Y, np.log(1 - Y_hat).T))
+#    #cost = -1 / m * (np.dot(Y, np.log(Y_hat)) + np.dot(1 - Y, np.log(1 - Y_hat)))
+#    return np.squeeze(cost)
+#-------------------------------------------------------------------------------
 
 ##Layers
 class Layer:
