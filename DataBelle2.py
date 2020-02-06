@@ -14,7 +14,7 @@ hMT4=np.array(data['harmonicMomentThrust4'],dtype=float)
 fWR2=np.array(data['foxWolframR2'],dtype=float)
 fWR3=np.array(data['foxWolframR3'],dtype=float)
 
-X=(np.array([hMT2, hMT4, fWR2, fWR3 ])).T
+X=(np.array([ norm(hMT2), norm(hMT4) ])).T
 Ytarget=(np.array([np.array(data['isBB'],dtype=float)])).T
 
 #Other data to test the trained NN
@@ -27,7 +27,7 @@ hMT4_bis=np.array(data2['harmonicMomentThrust4'],dtype=float)
 fWR2_bis=np.array(data2['foxWolframR2'],dtype=float)
 fWR3_bis=np.array(data2['foxWolframR3'],dtype=float)
 
-X2=(np.array([hMT2_bis, hMT4_bis, fWR2_bis, fWR3_bis ])).T
+X2=(np.array([ norm(hMT2_bis), norm(hMT4_bis) ])).T
 Ytarget2=(np.array([np.array(data2['isBB'],dtype=float)])).T
 
 
@@ -38,7 +38,7 @@ def print_results(inputs: Tensor, targets: Tensor, predictions: Tensor) -> None:
     for x, y, z in zip(inputs, targets, predictions):
         print(f'{x} =>   {y}    => {z.round(5)} =>  {z.round()}') #{float(z):.5f} =>    {z.round()}')
         
-def train_NN(net: Optimizer, inputs: Tensor, targets: Tensor, epochs: int = 10000):
+def train_NN(net: Optimizer, inputs: Tensor, targets: Tensor, epochs: int = 1000):
     train(net, inputs, targets, num_epochs=epochs)
     predictions = net.forward(inputs)
     print_results(inputs, targets, predictions)

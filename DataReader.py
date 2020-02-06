@@ -1,11 +1,12 @@
 """
-Here are the functions used to read data from csv files,
-in order to use it to train neural networks 
+Here are the functions used to read data from csv file (and other functions related
+ to the manipulation of those data) in order to use it to train neural networks.
 
 @author: Corentin Roumegou / Sacha Cormenier
 """
 
 import csv
+import numpy as np
 
 def csv2dict(file: str, newline_symbol:str='\n', delimiter_symbol:str=',')-> dict:
     """
@@ -37,3 +38,11 @@ def csv2dict(file: str, newline_symbol:str='\n', delimiter_symbol:str=',')-> dic
     
     #Returns the dictionary with the names
     return data
+
+
+
+def norm(vect):
+    '''
+    Returns the normalized vector
+    '''
+    return vect/np.mean(vect)
