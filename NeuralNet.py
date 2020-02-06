@@ -29,24 +29,17 @@ class MeanSquareError(Loss): #inherits from 'Loss' class
         return dMSE
     
 #-----------WIP----------------------------------------------------------------
-class CrossEntropy(Loss): #inherits from 'Loss' class 
+class BinaryCrossEntropy(Loss): #inherits from 'Loss' class 
     
     def loss(self, predicted, actual):
-        m = actual.shape[1]
-        cost = -1 / m * (np.dot(predicted, np.log(actual).T) + np.dot(1 - predicted, np.log(1 - actual).T))
+        m = predicted.shape[0]
+        cost = -(1/m) * (np.dot(actual.T, np.log(abs(predicted))) + np.dot((1 - actual).T, np.log(abs(1 - predicted))))
         return np.squeeze(cost)
     
     def grad(self, predicted: Tensor, actual: Tensor) -> Tensor:
-        dcost = - (np.divide(predicted, actual) - np.divide(1 - predicted, 1 - actual)) #Derivative with respect to each variable of the 'predicted' tensor
-        return dcost
+        dcost = - (np.divide(actual,predicted) - np.divide(1 - actual, 1 - predicted)) #Derivative with respect to each variable of the 'predicted' tensor
+        return (dcost)
 
-#def get_cost_value(Y_hat=actual, Y):
-#    # number of examples
-#    m = Y_hat.shape[1]
-#    # calculation of the cost according to the formula
-#    cost = -1 / m * (np.dot(Y, np.log(Y_hat).T) + np.dot(1 - Y, np.log(1 - Y_hat).T))
-#    #cost = -1 / m * (np.dot(Y, np.log(Y_hat)) + np.dot(1 - Y, np.log(1 - Y_hat)))
-#    return np.squeeze(cost)
 #-------------------------------------------------------------------------------
 
 ##Layers
@@ -226,7 +219,7 @@ class BatchIterator(DataIterator):
 def train(net: NeuralNet,
           inputs: Tensor,
           targets: Tensor,
-          loss: Loss = MeanSquareError(), 
+          loss: Loss = MeanSquareError(),
           optimizer: Optimizer = SGD(),
           iterator: DataIterator = BatchIterator(),
           num_epochs: int = 5000) -> None:
