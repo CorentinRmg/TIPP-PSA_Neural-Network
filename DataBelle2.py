@@ -5,7 +5,7 @@ from DataReader import *
 ###DATA__________________________________________________________________________________________________
 
 #Data for training
-data=csv2dict("../Data/data100.csv")
+data=csv2dict("../Data/data5000.csv")
 
 sph=np.array(data['sphericity'],dtype=float)
 hMT2=np.array(data['harmonicMomentThrust2'],dtype=float)
@@ -14,11 +14,11 @@ hMT4=np.array(data['harmonicMomentThrust4'],dtype=float)
 fWR2=np.array(data['foxWolframR2'],dtype=float)
 fWR3=np.array(data['foxWolframR3'],dtype=float)
 
-X=(np.array([ norm(hMT2), norm(hMT4) ])).T
+X=(np.array([ norm(fWR2), norm(hMT2), norm(hMT4) ])).T
 Ytarget=(np.array([np.array(data['isBB'],dtype=float)])).T
 
 #Other data to test the trained NN
-data2=csv2dict("../Data/data200.csv")
+data2=csv2dict("../Data/data100_2.csv")
 
 sph_bis=np.array(data2['sphericity'],dtype=float)
 hMT2_bis=np.array(data2['harmonicMomentThrust2'],dtype=float)
@@ -27,7 +27,7 @@ hMT4_bis=np.array(data2['harmonicMomentThrust4'],dtype=float)
 fWR2_bis=np.array(data2['foxWolframR2'],dtype=float)
 fWR3_bis=np.array(data2['foxWolframR3'],dtype=float)
 
-X2=(np.array([ norm(hMT2_bis), norm(hMT4_bis) ])).T
+X2=(np.array([ norm(fWR2_bis), norm(hMT2_bis), norm(hMT4_bis) ])).T
 Ytarget2=(np.array([np.array(data2['isBB'],dtype=float)])).T
 
 
@@ -47,7 +47,7 @@ def test_NN(net: Optimizer, inputs: Tensor, targets: Tensor, loss_func: Loss = M
     predictions = net.forward(inputs)
     print_results(inputs, targets, predictions)    
     Loss_value=loss_func.loss(predictions,targets)
-    print("\nFonction de coût:", Loss_value)
+    print("\nloss function:", Loss_value)
 
 ###MAIN PROGRAM_________________________________________________________________________________________
 
