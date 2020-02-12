@@ -7,7 +7,7 @@ from typing import (Dict, Tuple, Callable, Sequence, Iterator, NamedTuple)
 from numpy import ndarray as Tensor
 Func = Callable[[Tensor], Tensor] #Function which takes a tensor and return a tensor
 
-#np.random.seed(99)
+np.random.seed(99)
 
 ##Loss Function 
 class Loss:
@@ -27,7 +27,20 @@ class MeanSquareError(Loss): #inherits from 'Loss' class
     def grad(self, predicted: Tensor, actual: Tensor) -> Tensor:
         dMSE=2*(predicted-actual) #Derivative with respect to each variable of the 'predicted' tensor
         return dMSE
+    
+#-----------WIP----------------------------------------------------------------
+class BinaryCrossEntropy(Loss): #inherits from 'Loss' class 
+    
+    def loss(self, predicted, actual):
+        m = predicted.shape[0]
+        cost = -(1/m) * (np.dot(actual.T, np.log(abs(predicted))) + np.dot((1 - actual).T, np.log(abs(1 - predicted))))
+        return np.squeeze(cost)
+    
+    def grad(self, predicted: Tensor, actual: Tensor) -> Tensor:
+        dcost = - (np.divide(actual,predicted) - np.divide(1 - actual, 1 - predicted)) #Derivative with respect to each variable of the 'predicted' tensor
+        return dcost
 
+#-------------------------------------------------------------------------------
 
 ##Layers
 class Layer:
@@ -206,12 +219,12 @@ class BatchIterator(DataIterator):
 def train(net: NeuralNet,
           inputs: Tensor,
           targets: Tensor,
-          loss: Loss = MeanSquareError(), 
+          loss: Loss = MeanSquareError(),
           optimizer: Optimizer = SGD(),
           iterator: DataIterator = BatchIterator(),
           num_epochs: int = 5000) -> None:
     
-    for epoch in range(num_epochs):
+    for epoch in range(num_epochs+1):
         epoch_loss = 0.0
         for batch in iterator(inputs, targets):
             # Write here the various steps (in order) needed 
@@ -233,3 +246,5 @@ def train(net: NeuralNet,
         # Print status every 50 iterations
         if epoch % 50 == 0:
             print(epoch, epoch_loss)
+#    print("      ", epoch, "           ",epoch_loss)
+
