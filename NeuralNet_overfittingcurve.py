@@ -18,11 +18,11 @@ class Loss:
     def grad(self, predicted: Tensor, actual: Tensor) -> Tensor:
         raise NotImplementedError
 
-class MeanSquareError(Loss): #inherits from 'Loss' class 
+class SumSquaredError(Loss): #inherits from 'Loss' class 
     
     def loss(self, predicted, actual):
-        MSE=sum((predicted-actual)**2)
-        return MSE
+        SE=sum((predicted-actual)**2)
+        return SE
     
     def grad(self, predicted: Tensor, actual: Tensor) -> Tensor:
         dMSE=2*(predicted-actual) #Derivative with respect to each variable of the 'predicted' tensor
@@ -203,7 +203,7 @@ class BatchIterator(DataIterator):
 
 
 ### Training    
-def test_NN(net: Optimizer, inputs: Tensor, targets: Tensor, loss_func: Loss = MeanSquareError()) -> float:
+def test_NN(net: Optimizer, inputs: Tensor, targets: Tensor, loss_func: Loss = SumSquaredError()) -> float:
     predictions = net.forward(inputs)
     
     Loss_value=loss_func.loss(predictions,targets)
@@ -214,7 +214,7 @@ def train_and_testOverFitting(net: NeuralNet,
           inputs_testing: Tensor,
           targets: Tensor,
           targets_testing: Tensor,
-          loss: Loss = MeanSquareError(),
+          loss: Loss = SumSquaredError(),
           optimizer: Optimizer = SGD(),
           iterator: DataIterator = BatchIterator(),
           num_epochs: int = 5000) -> list:
@@ -248,15 +248,23 @@ def train_and_testOverFitting(net: NeuralNet,
             
          
         #Print status every 50 iterations and add infos to the lists to return
-        if ((epoch % 50 == 0) and (epoch != 0)) or epoch in range(1,30):
-            print(epoch, epoch_loss)
+        if ((epoch % 50 == 0)  or epoch in range(1,150)): #and (epoch != 0))
+            print(epoch, "iterations") #, epoch_loss)
             
             number_of_iteration.append(epoch)
             
             loss_train_i=test_NN(net, inputs, targets)
             loss_training.append(loss_train_i)
+            print("training loss =", loss_train_i)
             
             loss_test_i=test_NN(net, inputs_testing, targets_testing)
             loss_testing.append(loss_test_i)
+            print("testing loss  =", loss_test_i)
             
-    return [number_of_iteration,loss_training,loss_testing]
+            #Note the difference between first training loss and first testing loss, in order to align the curves
+            if epoch == 0:
+                diff_train_test = loss_train_i-loss_test_i
+        
+
+            
+    return [number_of_iteration, loss_training, loss_testing, diff_train_test]
