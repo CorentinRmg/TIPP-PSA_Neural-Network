@@ -7,7 +7,7 @@ from typing import (Dict, Tuple, Callable, Sequence, Iterator, NamedTuple)
 from numpy import ndarray as Tensor
 Func = Callable[[Tensor], Tensor] #Function which takes a tensor and return a tensor
 
-#np.random.seed(99)
+np.random.seed(99)
 
 ##Loss Function 
 class Loss:
@@ -18,7 +18,7 @@ class Loss:
     def grad(self, predicted: Tensor, actual: Tensor) -> Tensor:
         raise NotImplementedError
 
-class MeanSquareError(Loss): #inherits from 'Loss' class 
+class SumSquaredError(Loss): #inherits from 'Loss' class 
     
     def loss(self, predicted, actual):
         MSE=sum((predicted-actual)**2)
@@ -27,7 +27,20 @@ class MeanSquareError(Loss): #inherits from 'Loss' class
     def grad(self, predicted: Tensor, actual: Tensor) -> Tensor:
         dMSE=2*(predicted-actual) #Derivative with respect to each variable of the 'predicted' tensor
         return dMSE
+    
+#-----------WIP----------------------------------------------------------------
+class BinaryCrossEntropy(Loss): #inherits from 'Loss' class 
+    
+    def loss(self, predicted, actual):
+        m = predicted.shape[0]
+        cost = -(1/m) * (np.dot(actual.T, np.log(abs(predicted))) + np.dot((1 - actual).T, np.log(abs(1 - predicted))))
+        return np.squeeze(cost)
+    
+    def grad(self, predicted: Tensor, actual: Tensor) -> Tensor:
+        dcost = - (np.divide(actual,predicted) - np.divide(1 - actual, 1 - predicted)) #Derivative with respect to each variable of the 'predicted' tensor
+        return dcost
 
+#-------------------------------------------------------------------------------
 
 ##Layers
 class Layer:
@@ -50,6 +63,7 @@ class Linear(Layer):
         # Inherit from base class Layer
         super().__init__() #call the __init__ function of the superclass (here: Layer)
         # Initialize the weights and bias with random values
+        np.random.seed(99)
         self.params["w"] = np.random.randn(input_size, output_size)
         self.params["b"] = np.random.randn(output_size)
 
@@ -206,7 +220,7 @@ class BatchIterator(DataIterator):
 def train(net: NeuralNet,
           inputs: Tensor,
           targets: Tensor,
-          loss: Loss = MeanSquareError(), 
+          loss: Loss = SumSquaredError(),
           optimizer: Optimizer = SGD(),
           iterator: DataIterator = BatchIterator(),
           num_epochs: int = 5000) -> None:
@@ -230,6 +244,8 @@ def train(net: NeuralNet,
             #Update of NeuralNetwork with new w and b with respect to grad
             optimizer.step(net)
             
-        # Print status every 50 iterations
+         
+        #Print status every 50 iterations
         if epoch % 50 == 0:
             print(epoch, epoch_loss)
+
