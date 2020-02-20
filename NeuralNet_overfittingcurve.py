@@ -249,7 +249,7 @@ def train_and_testOverFitting(net: NeuralNet,
          
         #Print status every 50 iterations and add infos to the lists to return
         if ((epoch % 50 == 0)  or epoch in range(1,150)): #and (epoch != 0))
-            print(epoch, "iterations") #, epoch_loss)
+            print(">>>iteration #",epoch)
             
             number_of_iteration.append(epoch)
             
