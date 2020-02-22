@@ -1,1 +1,1 @@
-ROC obtained for different iteriton, for testing and training
+ROC obtained for different number of training iterations, for testing and training
