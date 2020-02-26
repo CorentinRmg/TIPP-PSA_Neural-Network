@@ -27,20 +27,7 @@ class SumSquaredError(Loss): #inherits from 'Loss' class
     def grad(self, predicted: Tensor, actual: Tensor) -> Tensor:
         dMSE=2*(predicted-actual) #Derivative with respect to each variable of the 'predicted' tensor
         return dMSE
-    
-#-----------WIP----------------------------------------------------------------
-class BinaryCrossEntropy(Loss): #inherits from 'Loss' class 
-    
-    def loss(self, predicted, actual):
-        m = predicted.shape[0]
-        cost = -(1/m) * (np.dot(actual.T, np.log(abs(predicted))) + np.dot((1 - actual).T, np.log(abs(1 - predicted))))
-        return np.squeeze(cost)
-    
-    def grad(self, predicted: Tensor, actual: Tensor) -> Tensor:
-        dcost = - (np.divide(actual,predicted) - np.divide(1 - actual, 1 - predicted)) #Derivative with respect to each variable of the 'predicted' tensor
-        return dcost
 
-#-------------------------------------------------------------------------------
 
 ##Layers
 class Layer:
